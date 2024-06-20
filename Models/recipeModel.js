@@ -14,6 +14,10 @@ const recipeSchema = new Schema({
     type: String,
     required: true
   },
+  isFavourite: {
+    type: Boolean,
+    required: true
+  },
   ingredients: {
     type: [String],
     required: true

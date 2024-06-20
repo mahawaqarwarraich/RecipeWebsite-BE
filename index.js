@@ -26,6 +26,8 @@ app.use('/recipe', require('./Controllers/all-recipes.js'))
 // Route for getting single recipe
 app.use('/recipe', require('./Controllers/single-recipe.js'))
 
+// Route for toggling the favourite attribute
+app.use('/recipe', require('./Controllers/toggleFavourite.js'))
 // Route for registering the user
 app.use('/user/register-user', require('./Controllers/register-user.js'));
 
