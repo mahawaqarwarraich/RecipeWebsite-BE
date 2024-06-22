@@ -1,48 +1,60 @@
 const express = require('express');
 const router = express.Router();
-const {body, validationResult} = require('express-validator');
-const userModel = require('../Models/userModel');
-const user = require('../Models/userModel')
-const bcrypt = require('bcrypt');
+const userModel = require('../Models/userModel.js');
+const bcrypt = require("bcrypt")
 
-router.post('/', [
-    body('email', 'email is not valid').isEmail(),
-    body('password', 'password cannot be null').exists(),
-    body('name', 'name cannot be null').exists()
+// Register Controller
+router.post('/', async (req, res) => {
+  try {
+    const { username, password } = req.body;
 
-], async (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-        res.status(400).send({validationError: error.array()})
+    // Validations
+    if (!username) {
+      return res.status(400).send({ error: 'Username is Required' });
     }
 
-    try {
+    if (!password) {
+      return res.status(400).send({ error: 'Password is Required' });
+    }
 
-        const salt = await bcrypt.genSalt(10);
-        const securePassword = await bcrypt.hash(req.body.password, salt)
+    // Check if user exists
+    const existingUser = await userModel.findOne({ username });
 
-        const data = {
-            name: req.body.name,
-            email: req.body.email,
-            password: securePassword
-        }
+    // Existing user
+    if (existingUser) {
+      return res.status(400).send({
+        success: false,
+        message: 'User already exists. Please login.',
+      });
+    }
+    const mySalt = await bcrypt.genSalt(10) //Salt value for 10 characters
+    let hashedPassword = await bcrypt.hash(password, mySalt)
     
-        const newUser = user(data); 
-        await newUser.save();
 
-       // const newUser = await user.create(data);
 
-        const resData = {
-            message: "Data inserted sucessfully",
-            success: true,
-            newUser
-        }
 
-        res.json(resData)
-    } catch(e) {
-        console.log('error registering user', e);
-    }
+    // Create new user
+    const newUser = new userModel({
+      username,
+      password: hashedPassword,
+    });
 
-})
+    // Save user to database
+    const savedUser = await newUser.save();
+
+    res.status(201).send({
+      success: true,
+      message: 'User registered successfully',
+      user: savedUser,
+    });
+  } catch (error) {
+    console.error('Error in registration:', error);
+    res.status(500).send({
+      success: false,
+      message: 'Error in registration',
+      error: error.message,
+    });
+  }
+});
 
 module.exports = router;

@@ -26,6 +26,9 @@ const recipeSchema = new Schema({
     type: [String],
     required: true
   },
+  comments: {
+    type: [Schema.Types.ObjectId]
+  }
 }, { timestamps: true });
 
 const recipeModel = mongoose.model('Recipe', recipeSchema);
