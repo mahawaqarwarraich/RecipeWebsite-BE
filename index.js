@@ -1,8 +1,10 @@
 const connectToMongo = require('./db.js');
 connectToMongo();
-
 const express = require('express');
 const cors = require('cors');
+const dotenv = require("dotenv")
+dotenv.config()
+
 
 const app = express();
 
@@ -41,8 +43,28 @@ app.use('/recipes', require('./Controllers/CreateComment.js'))
 // Route for registering the user
 app.use('/users', require('./Controllers/register-user.js'));
 
+
 // Route for log in the user
 app.use('/users', require('./Controllers/Login.js'));
+
+// Route for crreating new favourite
+app.use('/favourites', require('./Controllers/NewFavourite'));
+
+// Route for deleting favourite
+app.use('/favourites', require('./Controllers/DeleteFavourite'));
+
+// Route for creating new recipe
+app.use('/recipes', require('./Controllers/UploadRecipe'));
+
+// Route for creating new recipe
+app.use('/recipes', require('./Controllers/UpdateRecipe'));
+
+// Route for deleting recipe
+app.use('/recipes', require('./Controllers/DeleteRecipe'));
+ 
+ 
+
+
  
 
 

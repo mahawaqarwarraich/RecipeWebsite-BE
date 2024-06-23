@@ -1,0 +1,22 @@
+// routes/favorites.js
+const express = require('express');
+const router = express.Router();
+const favouriteModel = require('../Models/favouriteModel.js');
+
+
+// Create a new favorite
+router.post('/', async (req, res) => {
+  const { userId, recipeId } = req.body;
+  console.log(userId)
+  console.log(recipeId)
+  if (!userId || !recipeId) console.log('user id and recipe id are required')
+  const newFavorite = new favouriteModel({ userId, recipeId });
+  try {
+    await newFavorite.save();
+    res.status(201).json({ success: true, message: 'Added to favourites', favorite: newFavorite });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+module.exports = router;
