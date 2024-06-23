@@ -4,7 +4,7 @@ const userModel = require('../Models/userModel.js');
 const bcrypt = require("bcrypt")
 
 // Register Controller
-router.post('/', async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { username, password } = req.body;
 

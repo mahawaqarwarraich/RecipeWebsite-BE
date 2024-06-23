@@ -40,12 +40,11 @@ app.use('/recipes', require('./Controllers/CreateComment.js'))
 
 // Route for registering the user
 app.use('/users', require('./Controllers/register-user.js'));
- 
-// Route for deleting the user
-app.use('/user/delete-user', require('./Controllers/delete-user.js'))
 
-// Router for updating user
-app.use('/user/update-user', require('./Controllers/update-user.js'))
+// Route for log in the user
+app.use('/users', require('./Controllers/Login.js'));
+ 
+
 
 
 app.listen(port)
